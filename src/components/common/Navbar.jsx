@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useSettings } from '../../context/SettingsContext';
@@ -33,6 +33,7 @@ const Navbar = () => {
   const { totalItems } = useCart();
   const { settings } = useSettings();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,6 +66,14 @@ const Navbar = () => {
     { to: '/contact', label: 'Contact', icon: FiMail },
   ];
 
+  // Check if a link is active
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
@@ -92,7 +101,11 @@ const Navbar = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className="px-4 py-2.5 text-sm font-semibold text-[#5B5566] hover:text-[#5B21B6] transition-all duration-200 rounded-full hover:bg-[#F5F0FF]"
+                className={`px-4 py-2.5 text-sm font-semibold transition-all duration-200 rounded-full ${
+                  isActive(link.to)
+                    ? 'bg-gradient-to-r from-[#6D28D9] via-[#7C3AED] to-[#2563EB] text-white shadow-[0_8px_20px_rgba(124,58,237,0.22)] hover:shadow-[0_10px_25px_rgba(124,58,237,0.30)]'
+                    : 'text-[#5B5566] hover:text-[#5B21B6] hover:bg-[#F5F0FF]'
+                }`}
               >
                 {link.label}
               </Link>
@@ -196,9 +209,13 @@ const Navbar = () => {
                   key={link.to}
                   to={link.to}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center px-4 py-3 text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] rounded-2xl transition-all"
+                  className={`flex items-center px-4 py-3 transition-all rounded-2xl ${
+                    isActive(link.to)
+                      ? 'bg-gradient-to-r from-[#6D28D9] via-[#7C3AED] to-[#2563EB] text-white shadow-[0_8px_20px_rgba(124,58,237,0.22)]'
+                      : 'text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6]'
+                  }`}
                 >
-                  <link.icon className="mr-3 text-[#8B7D9A]" size={20} />
+                  <link.icon className={`mr-3 ${isActive(link.to) ? 'text-white' : 'text-[#8B7D9A]'}`} size={20} />
                   {link.label}
                 </Link>
               ))}
