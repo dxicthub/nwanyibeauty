@@ -159,8 +159,9 @@ const Footer = () => {
 
         <div className="border-t border-white/10 mt-8 pt-8 text-center text-sm text-white/40">
           <p>
-            {settings?.footerText || '© 2024 Nyanyi Onitsha Beauty & Salon Products. All rights reserved.'}
-          </p>
+            {settings?.footerText || '© 2026 Nyanyi Onitsha Beauty & Salon Products. All rights reserved.'}
+          </p> 
+          <p>Powered by <span className='text-white'> <strong></strong>DXICTHUB</span></p>
         </div>
       </div>
     </footer>
