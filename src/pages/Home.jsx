@@ -29,6 +29,17 @@ import heroBanner13 from '../assets/images/hero_banner13.jpg';
 // Import CTA Background Image
 import heroLastBg from '../assets/images/hero_last.jpg';
 
+// Import Category Images
+import cat1 from '../assets/images/home_cat/cat1.jpg';
+import cat2 from '../assets/images/home_cat/cat2.jpg';
+import cat3 from '../assets/images/home_cat/cat3.jpg';
+import cat4 from '../assets/images/home_cat/cat4.jpg';
+import cat5 from '../assets/images/home_cat/cat5.jpg';
+import cat6 from '../assets/images/home_cat/cat6.jpg';
+import cat7 from '../assets/images/home_cat/cat7.jpg';
+import cat8 from '../assets/images/home_cat/cat8.jpg';
+import cat9 from '../assets/images/home_cat/cat9.jpg';
+
 // All icons from react-icons
 import { 
   FiMenu, FiSearch, FiUser, FiShoppingCart, FiX, FiTruck, FiRefreshCw,
@@ -58,17 +69,17 @@ const carouselImages = [
   heroBanner13,
 ];
 
-// Category data for navigation
+// Category data with images
 const CATEGORIES = [
-  { id: 'hairs', title: 'Hairs', icon: FiLayers },
-  { id: 'hair-products', title: 'Hair Products', icon: FiPackage },
-  { id: 'salon-materials', title: 'Salon Materials', icon: FiZap },
-  { id: 'salon-equipment', title: 'Salon Equipment', icon: FiShoppingBag },
-  { id: 'nails-accessories', title: 'Nails & Accessories', icon: IoSparkles },
-  { id: 'eyelashes-accessories', title: 'Eyelashes & Accessories', icon: FiEye },
-  { id: 'weavons', title: 'Weavons', icon: FiLayers },
-  { id: 'tattoos', title: 'Tattoos', icon: FiPackage },
-  { id: 'wig-tools', title: 'Wig Tools', icon: FiClock },
+  { id: 'hairs', title: 'Hairs', image: cat1 },
+  { id: 'hair-products', title: 'Hair Products', image: cat2 },
+  { id: 'salon-materials', title: 'Salon Materials', image: cat3 },
+  { id: 'salon-equipment', title: 'Salon Equipment', image: cat4 },
+  { id: 'nails-accessories', title: 'Nails & Accessories', image: cat5 },
+  { id: 'eyelashes-accessories', title: 'Eyelashes & Accessories', image: cat6 },
+  { id: 'weavons', title: 'Weavons', image: cat7 },
+  { id: 'tattoos', title: 'Tattoos', image: cat8 },
+  { id: 'wig-tools', title: 'Wig Tools', image: cat9 },
 ];
 
 // Store Services Data
@@ -618,7 +629,6 @@ const Home = () => {
               onClick={() => scrollToSection(cat.id)}
               className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap flex items-center gap-1.5 bg-gray-50 text-gray-600 hover:bg-[#7C3AED] hover:text-white border border-transparent hover:border-[#7C3AED]"
             >
-              <cat.icon className="w-4 h-4" />
               {cat.title}
             </button>
           ))}
@@ -717,46 +727,43 @@ const Home = () => {
   );
 
   // Updated Call to Action Section with Background Image
- const CTASection = () => (
-  <section className="relative py-20 md:py-28 lg:py-32 overflow-hidden">
-    {/* Background Image - Full height with padding */}
-    <div className="absolute inset-0 w-full h-full z-0">
-      <img 
-        src={heroLastBg} 
-        alt="Ready to Shop Background" 
-        className="w-full h-full object-cover object-center"
-      />
-      {/* Dark Overlay for better text readability */}
-      <div className="absolute inset-0 bg-[#6D28D9]/70 mix-blend-multiply"></div>
-    </div>
-    
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-8 md:py-12">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6">
-          Ready to Shop?
-        </h2>
-        <p className="text-white/90 text-base md:text-lg lg:text-xl mb-8 md:mb-10 max-w-2xl mx-auto">
-          Browse our extensive collection of professional beauty and salon products
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-          <a
-            href="#products"
-            className="bg-white text-[#6D28D9] px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-[#EDE9FE] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
-          >
-            Shop Now
-          </a>
-          <a
-            href="#services-guarantees"
-            className="border-2 border-white/50 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm hover:border-white/70 text-sm md:text-base"
-          >
-            Our Services
-          </a>
+  const CTASection = () => (
+    <section className="relative py-20 md:py-28 lg:py-32 overflow-hidden">
+      <div className="absolute inset-0 w-full h-full z-0">
+        <img 
+          src={heroLastBg} 
+          alt="Ready to Shop Background" 
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[#6D28D9]/70 mix-blend-multiply"></div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-8 md:py-12">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6">
+            Ready to Shop?
+          </h2>
+          <p className="text-white/90 text-base md:text-lg lg:text-xl mb-8 md:mb-10 max-w-2xl mx-auto">
+            Browse our extensive collection of professional beauty and salon products
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            <a
+              href="#products"
+              className="bg-white text-[#6D28D9] px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-[#EDE9FE] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
+            >
+              Shop Now
+            </a>
+            <a
+              href="#services-guarantees"
+              className="border-2 border-white/50 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm hover:border-white/70 text-sm md:text-base"
+            >
+              Our Services
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
-
+    </section>
+  );
 
   if (error && !loading) {
     return (
@@ -781,7 +788,7 @@ const Home = () => {
       <CategoryNav />
       
       <main className="flex-grow">
-        {/* Categories Section */}
+        {/* Categories Section with Images */}
         <section id="categories" className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-10">
@@ -799,14 +806,22 @@ const Home = () => {
                 <button
                   key={cat.id}
                   onClick={() => scrollToSection(cat.id)}
-                  className="group bg-[#FAF9FF] hover:bg-[#7C3AED] rounded-2xl p-4 text-center transition-all duration-300 border border-purple-100/50 hover:border-[#7C3AED] hover:shadow-lg hover:-translate-y-1"
+                  className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 >
-                  <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-purple-50 group-hover:bg-white/20 flex items-center justify-center transition-colors">
-                    <cat.icon className="w-6 h-6 text-[#7C3AED] group-hover:text-white transition-colors" />
+                  <div className="absolute inset-0 w-full h-full">
+                    <img 
+                      src={cat.image} 
+                      alt={cat.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
                   </div>
-                  <p className="text-xs font-medium text-gray-700 group-hover:text-white transition-colors">
-                    {cat.title}
-                  </p>
+                  <div className="relative z-10 aspect-square flex items-center justify-center p-4">
+                    <p className="text-white font-bold text-sm md:text-base text-center uppercase tracking-wider drop-shadow-lg">
+                      {cat.title}
+                    </p>
+                  </div>
                 </button>
               ))}
             </div>

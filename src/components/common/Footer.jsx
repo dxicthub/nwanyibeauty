@@ -59,7 +59,7 @@ const Footer = () => {
                 className="w-12 h-12 rounded-xl object-cover shadow-lg border border-[#E9DDF7]"
               />
               <h3 className="text-xl font-bold text-[#241238]">
-                {settings?.businessName || 'Nyanyi Beauty'}
+                {settings?.businessName || 'Nyanyi Onitsha'}
               </h3>
             </div>
             <p className="text-sm text-[#6B6475] mb-4">

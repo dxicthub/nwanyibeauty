@@ -87,11 +87,11 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-3 group">
             <img 
               src={logo} 
-              alt="Nyanyi Beauty Logo" 
+              alt="Nyanyi Onitsha Logo" 
               className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover shadow-lg group-hover:shadow-xl transition-all duration-300"
             />
             <span className="text-xl font-extrabold tracking-tight text-[#35145F] group-hover:text-[#7C3AED] transition-colors">
-              {settings?.businessName || 'Nyanyi Beauty'}
+              {settings?.businessName || 'Nyanyi Onitsha'}
             </span>
           </Link>
 
