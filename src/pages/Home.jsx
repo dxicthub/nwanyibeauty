@@ -696,7 +696,7 @@ const Home = () => {
     </div>
   );
 
-  // Hero Carousel Section - All images are clickable links to Shop page
+  // Hero Carousel Section - Images are clickable links to Shop page
   const HeroCarousel = () => (
     <section 
       className="relative w-full px-4 sm:px-6 lg:px-8"
@@ -728,7 +728,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - These don't trigger navigation */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -750,7 +750,7 @@ const Home = () => {
           <FiChevronRight size={24} />
         </button>
 
-        {/* Dot Indicators */}
+        {/* Dot Indicators - These don't trigger navigation */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {carouselImages.map((_, index) => (
             <button
@@ -920,50 +920,6 @@ const Home = () => {
     </section>
   );
 
-  // Footer
-  const Footer = () => (
-    <footer className="bg-[#171047] text-white/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-xl font-bold text-white mb-4">Nyanyi Beauty</h3>
-            <p className="text-sm text-white/60">Your one-stop destination for quality beauty, hair, nails, salon equipment and more.</p>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Shop</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Categories</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              {CATEGORIES.slice(0, 6).map((cat) => (
-                <li key={cat.id}>
-                  <a href={`#section-${cat.id}`} className="hover:text-white transition-colors">{cat.title}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Contact</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li className="flex items-center gap-2"><FiPhone className="text-[#7C3AED]" /> +234 123 456 7890</li>
-              <li className="flex items-center gap-2"><FiMail className="text-[#7C3AED]" /> info@nyanyi.com</li>
-              <li className="flex items-center gap-2"><FiMapPin className="text-[#7C3AED]" /> Onitsha, Nigeria</li>
-            </ul>
-          </div>
-        </div>
-        <div className="border-t border-white/10 mt-8 pt-8 text-center text-sm text-white/40">
-          <p>© 2024 Nyanyi Onitsha Beauty & Salon Products. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
-
   if (error && !loading) {
     return (
       <div className="pt-16 bg-[#FAF9FF] min-h-screen flex items-center justify-center">
@@ -1056,7 +1012,6 @@ const Home = () => {
 
         <WhyChooseUs />
         <CTASection />
-        <Footer />
       </main>
 
       {/* Modals */}
