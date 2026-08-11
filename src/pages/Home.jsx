@@ -761,11 +761,9 @@ const Home = () => {
     <section className="py-16 bg-[#FAF9FF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#7C3AED] bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
-            Why Nwanyin Onitsha
-          </span>
+          
           <h2 className="text-3xl font-bold mt-3">
-            Why Choose <span className="text-[#2563EB]">Nwanyin Onitsha</span>
+            Why Choose <span className="text-[#2563EB]">Nwanyi Onitsha</span>
           </h2>
           <p className="text-sm text-gray-500 mt-2">
             We're committed to providing the best experience for our customers
