@@ -40,6 +40,13 @@ import cat7 from '../assets/images/home_cat/cat7.jpg';
 import cat8 from '../assets/images/home_cat/cat8.jpg';
 import cat9 from '../assets/images/home_cat/cat9.jpg';
 
+// Import Why Choose Images
+import why1 from '../assets/images/home_why_choose/why1.jpg';
+import why2 from '../assets/images/home_why_choose/why2.jpg';
+import why3 from '../assets/images/home_why_choose/why3.jpg';
+import why4 from '../assets/images/home_why_choose/why4.jpg';
+import why5 from '../assets/images/home_why_choose/why5.jpg';
+
 // All icons from react-icons
 import { 
   FiMenu, FiSearch, FiUser, FiShoppingCart, FiX, FiTruck, FiRefreshCw,
@@ -80,6 +87,35 @@ const CATEGORIES = [
   { id: 'weavons', title: 'Weavons', image: cat7 },
   { id: 'tattoos', title: 'Tattoos', image: cat8 },
   { id: 'wig-tools', title: 'Wig Tools', image: cat9 },
+];
+
+// Why Choose Data with Images - No Descriptions
+const WHY_CHOOSE_DATA = [
+  {
+    id: 'w1',
+    title: '',
+    image: why1,
+  },
+  {
+    id: 'w2',
+    title: '',
+    image: why2,
+  },
+  {
+    id: 'w3',
+    title: '',
+    image: why3,
+  },
+  {
+    id: 'w4',
+    title: '',
+    image: why4,
+  },
+  {
+    id: 'w5',
+    title: '',
+    image: why5,
+  },
 ];
 
 // Store Services Data
@@ -151,6 +187,27 @@ const StarRating = ({ rating }) => {
           )}
         </span>
       ))}
+    </div>
+  );
+};
+
+// Why Choose Card Component - No Description Text, Centered Title
+const WhyChooseCard = ({ item }) => {
+  return (
+    <div className="group relative rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-2 w-full h-[320px] md:h-[360px] lg:h-[400px]">
+      <div className="absolute inset-0 w-full h-full">
+        <img 
+          src={item.image} 
+          alt={item.title} 
+          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10 group-hover:from-black/60 group-hover:via-black/20 transition-all duration-500"></div>
+      </div>
+      <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 text-center">
+        <h3 className="text-white font-bold text-xl md:text-2xl lg:text-3xl drop-shadow-lg">
+          {item.title}
+        </h3>
+      </div>
     </div>
   );
 };
@@ -699,27 +756,25 @@ const Home = () => {
     );
   };
 
-  // Why Choose Us
+  // Why Choose Us Section - Clean Cards with Only Title
   const WhyChooseUs = () => (
     <section className="py-16 bg-[#FAF9FF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs font-bold uppercase tracking-widest text-[#7C3AED] bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
-            Why Nyanyi
+            Why Nwanyin Onitsha
           </span>
-          <h2 className="text-3xl font-bold text-gray-900 mt-3">Why Choose Us</h2>
+          <h2 className="text-3xl font-bold mt-3">
+            Why Choose <span className="text-[#2563EB]">Nwanyin Onitsha</span>
+          </h2>
           <p className="text-sm text-gray-500 mt-2">
             We're committed to providing the best experience for our customers
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {STORE_SERVICES.map(service => (
-            <ServiceCard 
-              key={service.id} 
-              service={service} 
-              onSelect={setSelectedServiceDetail} 
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {WHY_CHOOSE_DATA.map((item) => (
+            <WhyChooseCard key={item.id} item={item} />
           ))}
         </div>
       </div>
@@ -814,7 +869,6 @@ const Home = () => {
                       alt={cat.title} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    {/* Dark Overlay */}
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
                   </div>
                   <div className="relative z-10 aspect-square flex items-center justify-center p-4">
