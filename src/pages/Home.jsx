@@ -5,6 +5,12 @@ import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 
+// Import Rush Hour Section
+import RushHourSection from '../components/shop/RushHourSection';
+
+// Import the updated ProductCard component
+import ProductCard from '../components/shop/ProductCard';
+
 // Import local hero banner images for carousel
 import heroBanner1 from '../assets/images/hero_banner.jpg';
 import heroBanner2 from '../assets/images/hero_banner2.jpg';
@@ -19,6 +25,9 @@ import heroBanner10 from '../assets/images/hero_banner10.jpg';
 import heroBanner11 from '../assets/images/hero_banner11.jpg';
 import heroBanner12 from '../assets/images/hero_banner12.jpg';
 import heroBanner13 from '../assets/images/hero_banner13.jpg';
+
+// Import CTA Background Image
+import heroLastBg from '../assets/images/hero_last.jpg';
 
 // All icons from react-icons
 import { 
@@ -131,181 +140,6 @@ const StarRating = ({ rating }) => {
           )}
         </span>
       ))}
-    </div>
-  );
-};
-
-// Product Card Component
-const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggleWishlist }) => {
-  const [isAdding, setIsAdding] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const getStockStatus = () => {
-    if (product.stock === 0) return { text: 'Out of Stock', color: 'bg-red-500' };
-    if (product.stock <= 10) return { text: 'Low Stock', color: 'bg-yellow-500' };
-    return { text: 'In Stock', color: 'bg-green-500' };
-  };
-
-  const stockStatus = getStockStatus();
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (isAdding || isAdded || product.stock === 0) return;
-    
-    setIsAdding(true);
-    setTimeout(() => {
-      setIsAdding(false);
-      setIsAdded(true);
-      onAddToCart(product);
-      setTimeout(() => setIsAdded(false), 2000);
-    }, 350);
-  };
-
-  return (
-    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 relative">
-      {/* Badges */}
-      {product.featured && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-[#7C3AED] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            Featured
-          </span>
-        </div>
-      )}
-      
-      {product.sale && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-[#7C3AED] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            -{product.sale}%
-          </span>
-        </div>
-      )}
-      
-      {product.isNew && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-[#2563EB] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            New
-          </span>
-        </div>
-      )}
-      
-      {product.isBestSeller && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-[#7C3AED] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            Bestseller
-          </span>
-        </div>
-      )}
-      
-      {product.stock === 0 && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-red-500 text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            Out of Stock
-          </span>
-        </div>
-      )}
-      
-      {/* Wishlist button */}
-      <button 
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleWishlist(product);
-        }}
-        className={`absolute top-3 right-3 z-10 h-9 w-9 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
-          isWishlisted 
-            ? 'bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/30 scale-110' 
-            : 'bg-white/90 backdrop-blur-sm text-gray-400 hover:text-[#7C3AED] hover:bg-white'
-        }`} 
-        aria-label="Add to wishlist"
-      >
-        <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-current text-[#7C3AED]' : ''}`} />
-      </button>
-
-      {/* Quick View Button */}
-      <button 
-        onClick={() => onQuickView(product)}
-        className="absolute top-14 right-3 z-10 h-9 w-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center text-gray-600 hover:text-[#7C3AED] hover:bg-white transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
-        title="Quick View"
-      >
-        <FiEye className="w-4 h-4" />
-      </button>
-      
-      <div 
-        onClick={() => onQuickView(product)}
-        className="relative aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer"
-      >
-        <img 
-          src={product.images?.[0] || `https://placehold.co/400x400/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`} 
-          alt={product.name} 
-          className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-          onError={(e) => { 
-            e.target.src = `https://placehold.co/400x400/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`;
-          }}
-        />
-        
-        {/* Quick add overlay */}
-        <div className="absolute bottom-0 inset-x-0 p-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-          <button 
-            onClick={handleAdd}
-            disabled={isAdding || isAdded || product.stock === 0}
-            className={`w-full font-semibold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider ${
-              product.stock === 0 
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
-            }`}
-          >
-            {isAdding ? (
-              <><FiLoader className="w-4 h-4 animate-spin" /> Adding...</>
-            ) : isAdded ? (
-              <><FiCheck className="w-4 h-4 text-emerald-500" /> Added to Cart</>
-            ) : product.stock === 0 ? (
-              'Out of Stock'
-            ) : (
-              <><FiShoppingBag className="w-4 h-4" /> Quick Add</>
-            )}
-          </button>
-        </div>
-      </div>
-      
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="text-[10px] font-bold uppercase tracking-widest text-[#7C3AED] mb-1">{product.category?.name}</div>
-        <h3 
-          onClick={() => onQuickView(product)}
-          className="text-sm font-semibold text-gray-900 mb-1.5 line-clamp-1 hover:text-[#7C3AED] cursor-pointer transition-colors"
-        >
-          {product.name}
-        </h3>
-        
-        <div className="flex items-center gap-1.5 mb-2">
-          <StarRating rating={4.5} />
-          <span className="text-[10px] text-gray-500 font-medium">(24)</span>
-        </div>
-        
-        <div className="mt-auto flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-base font-bold text-[#5B21B6]">
-              {formatPrice(product.price)}
-            </span>
-            {product.originalPrice && (
-              <span className="text-xs text-gray-400 line-through">
-                {formatPrice(product.originalPrice)}
-              </span>
-            )}
-          </div>
-          <span className={`text-[10px] font-medium ${stockStatus.text === 'In Stock' ? 'text-green-600' : stockStatus.text === 'Low Stock' ? 'text-yellow-600' : 'text-red-600'}`}>
-            {stockStatus.text}
-          </span>
-        </div>
-      </div>
     </div>
   );
 };
@@ -620,6 +454,7 @@ const Home = () => {
         try {
           const response = await api.get(`/products?category=${category.slug}&limit=25`);
           productsByCategory[category.slug] = response.products || [];
+          console.log(`✅ Loaded ${productsByCategory[category.slug].length} products for ${category.name}`);
         } catch (error) {
           console.error(`Error fetching products for ${category.name}:`, error);
           productsByCategory[category.slug] = [];
@@ -696,15 +531,14 @@ const Home = () => {
     </div>
   );
 
-  // Hero Carousel Section - Images are clickable links to Shop page
+  // Hero Carousel Section
   const HeroCarousel = () => (
     <section 
-      className="relative w-full px-4 sm:px-6 lg:px-8"
+      className="relative w-full px-2 sm:px-4 lg:px-8"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl mt-12 sm:mt-14 md:mt-16 lg:mt-20">
-        {/* Images Container */}
+      <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl mt-12 sm:mt-14 md:mt-16 lg:mt-20">
         <div 
           className="flex transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -715,43 +549,40 @@ const Home = () => {
               to="/shop"
               className="min-w-full block cursor-pointer"
               onClick={() => {
-                // Optional: Add analytics or tracking here
                 console.log(`Hero slide ${index + 1} clicked - Redirecting to Shop`);
               }}
             >
               <img 
                 src={image} 
                 alt={`Nyanyi Beauty & Salon Products - Slide ${index + 1}`} 
-                className="w-full h-auto max-h-[70vh] md:max-h-[75vh] object-contain object-center hover:scale-105 transition-transform duration-500"
+                className="w-full h-auto max-h-[70vh] sm:max-h-[70vh] md:max-h-[75vh] object-contain object-center hover:scale-105 transition-transform duration-500"
               />
             </Link>
           ))}
         </div>
 
-        {/* Navigation Arrows - These don't trigger navigation */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             prevSlide();
           }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10"
+          className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10"
           aria-label="Previous slide"
         >
-          <FiChevronLeft size={24} />
+          <FiChevronLeft size={20} className="sm:w-6 sm:h-6" />
         </button>
         <button
           onClick={(e) => {
             e.stopPropagation();
             nextSlide();
           }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10"
+          className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10"
           aria-label="Next slide"
         >
-          <FiChevronRight size={24} />
+          <FiChevronRight size={20} className="sm:w-6 sm:h-6" />
         </button>
 
-        {/* Dot Indicators - These don't trigger navigation */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2 z-10">
           {carouselImages.map((_, index) => (
             <button
               key={index}
@@ -759,9 +590,9 @@ const Home = () => {
                 e.stopPropagation();
                 goToSlide(index);
               }}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              className={`w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
                 currentSlide === index 
-                  ? 'bg-white w-6' 
+                  ? 'bg-white w-4 sm:w-6' 
                   : 'bg-white/50 hover:bg-white/80'
               }`}
               aria-label={`Go to slide ${index + 1}`}
@@ -769,8 +600,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Slide Counter */}
-        <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full z-10">
+        <div className="hidden sm:block absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full z-10">
           {currentSlide + 1} / {carouselImages.length}
         </div>
       </div>
@@ -804,7 +634,6 @@ const Home = () => {
         id={`section-${category.slug}`}
         className={`scroll-mt-20 ${index < categories.length - 1 ? 'mb-16 md:mb-20' : ''}`}
       >
-        {/* Category Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-3">
@@ -826,7 +655,6 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Products Grid */}
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             {products.slice(0, 5).map((product) => (
@@ -846,7 +674,6 @@ const Home = () => {
           </div>
         )}
 
-        {/* View All Button */}
         {products.length > 0 && (
           <div className="text-center mt-6">
             <Link
@@ -889,36 +716,47 @@ const Home = () => {
     </section>
   );
 
-  // Call to Action Section
-  const CTASection = () => (
-    <section className="py-16 bg-gradient-to-br from-[#7C3AED] via-[#6D28D9] to-[#2563EB] text-white relative overflow-hidden">
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-300 rounded-full blur-3xl"></div>
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Shop?</h2>
-        <p className="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
+  // Updated Call to Action Section with Background Image
+ const CTASection = () => (
+  <section className="relative py-20 md:py-28 lg:py-32 overflow-hidden">
+    {/* Background Image - Full height with padding */}
+    <div className="absolute inset-0 w-full h-full z-0">
+      <img 
+        src={heroLastBg} 
+        alt="Ready to Shop Background" 
+        className="w-full h-full object-cover object-center"
+      />
+      {/* Dark Overlay for better text readability */}
+      <div className="absolute inset-0 bg-[#6D28D9]/70 mix-blend-multiply"></div>
+    </div>
+    
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-8 md:py-12">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6">
+          Ready to Shop?
+        </h2>
+        <p className="text-white/90 text-base md:text-lg lg:text-xl mb-8 md:mb-10 max-w-2xl mx-auto">
           Browse our extensive collection of professional beauty and salon products
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
           <a
             href="#products"
-            className="bg-white text-[#7C3AED] px-8 py-3.5 rounded-xl font-semibold hover:bg-purple-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            className="bg-white text-[#6D28D9] px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-[#EDE9FE] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
           >
             Shop Now
           </a>
           <a
             href="#services-guarantees"
-            className="border-2 border-white/30 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm hover:border-white/50"
+            className="border-2 border-white/50 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 backdrop-blur-sm hover:border-white/70 text-sm md:text-base"
           >
             Our Services
           </a>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
+
 
   if (error && !loading) {
     return (
@@ -973,6 +811,16 @@ const Home = () => {
               ))}
             </div>
           </div>
+        </section>
+
+        {/* Rush Hour Section - Only section with offers */}
+        <section className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RushHourSection 
+            onAddToCart={handleAddToCart}
+            wishlistItems={wishlistItems}
+            onToggleWishlist={handleToggleWishlist}
+            onQuickView={setQuickViewProduct}
+          />
         </section>
 
         {/* Products Sections */}

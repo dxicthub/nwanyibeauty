@@ -1,50 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { FiShoppingCart, FiEye, FiHeart, FiShare2 } from 'react-icons/fi';
+import { FiShoppingCart, FiLoader, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
-const ProductCard = ({ product }) => {
-  const { addToCart } = useCart();
-  const [isHovered, setIsHovered] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  
-  const isInStock = product.stock > 0;
-  const isLowStock = product.stock > 0 && product.stock <= 10;
-  
-  const getStockStatus = () => {
-    if (product.stock === 0) return { text: 'Out of Stock', color: 'bg-red-500', bg: 'bg-red-50 text-red-700 border-red-200' };
-    if (product.stock <= 10) return { text: 'Low Stock', color: 'bg-yellow-500', bg: 'bg-yellow-50 text-yellow-700 border-yellow-200' };
-    return { text: 'In Stock', color: 'bg-green-500', bg: 'bg-green-50 text-green-700 border-green-200' };
-  };
-
-  const stockStatus = getStockStatus();
-
-  const handleAddToCart = () => {
-    if (isInStock) {
-      addToCart(product, 1);
-      toast.success(`${product.name} added to cart!`, {
-        icon: '🛒',
-        style: {
-          borderRadius: '12px',
-          background: '#333',
-          color: '#fff',
-        },
-      });
-    }
-  };
-
-  const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist', {
-      icon: isWishlisted ? '❤️' : '💖',
-      style: {
-        borderRadius: '12px',
-        background: '#333',
-        color: '#fff',
-      },
-    });
-  };
+const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggleWishlist }) => {
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-NG', {
@@ -55,120 +17,156 @@ const ProductCard = ({ product }) => {
     }).format(price);
   };
 
-  return (
-    <div 
-      className="group relative bg-white rounded-2xl shadow-card hover:shadow-elegant-hover transition-all duration-500 overflow-hidden"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Image Container */}
-      <Link to={`/product/${product._id}`} className="block relative overflow-hidden bg-gray-50">
-        <div className="aspect-square">
-          <img
-            src={product.images?.[0] || `https://via.placeholder.com/400x400/f0f0f0/808080?text=${encodeURIComponent(product.name)}`}
-            alt={product.name}
-            className={`w-full h-full object-cover transition-all duration-700 ${
-              isHovered ? 'scale-110' : 'scale-100'
-            }`}
-            loading="lazy"
-            onError={(e) => {
-              e.target.src = `https://via.placeholder.com/400x400/f0f0f0/808080?text=${encodeURIComponent(product.name)}`;
-            }}
-          />
-        </div>
-        
-        {/* Quick Action Buttons - Appear on Hover */}
-        <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${
-          isHovered ? 'opacity-100' : 'opacity-0'
-        }`}>
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={!isInStock}
-              className={`p-3 rounded-full shadow-lg transition-all duration-300 transform ${
-                isHovered ? 'translate-y-0' : 'translate-y-4'
-              } ${
-                isInStock
-                  ? 'bg-white text-primary-600 hover:bg-primary-600 hover:text-white'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
-            >
-              <FiShoppingCart size={20} />
-            </button>
-            <Link
-              to={`/product/${product._id}`}
-              className={`p-3 rounded-full bg-white shadow-lg transition-all duration-300 transform ${
-                isHovered ? 'translate-y-0' : 'translate-y-4'
-              } hover:bg-primary-600 hover:text-white`}
-            >
-              <FiEye size={20} />
-            </Link>
-          </div>
-        </div>
-        
-        {/* Stock Status Badge */}
-        <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold ${stockStatus.bg} border shadow-sm`}>
-          <span className={`inline-block w-1.5 h-1.5 rounded-full ${stockStatus.color} mr-1.5`}></span>
-          {stockStatus.text}
-        </div>
-        
-        {/* Featured Badge */}
-        {product.featured && (
-          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gold-400 to-gold-500 text-white shadow-lg">
-            ⭐ Featured
-          </div>
-        )}
-        
-        {/* Wishlist Button */}
-        <button
-          onClick={handleWishlist}
-          className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 ${
-            isWishlisted ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-400 hover:text-red-500'
-          } shadow-md hover:shadow-lg`}
-        >
-          <FiHeart size={16} className={isWishlisted ? 'fill-current' : ''} />
-        </button>
-      </Link>
+  const getStockStatus = () => {
+    if (product.stock === 0) return { text: 'Out of Stock', color: 'bg-red-500' };
+    if (product.stock <= 10) return { text: 'Low Stock', color: 'bg-yellow-500' };
+    return { text: 'In Stock', color: 'bg-green-500' };
+  };
 
-      {/* Product Info */}
-      <div className="p-4 md:p-5">
+  const stockStatus = getStockStatus();
+  const isInStock = product.stock > 0;
+
+  // Use product fields: price, originalPrice, stock, maxStock
+  const currentPrice = product.price;
+  const originalPrice = product.originalPrice || product.price;
+  const hasDiscount = originalPrice > currentPrice;
+  const maxStock = product.maxStock || 100;
+  const stockPercentage = Math.min((product.stock / maxStock) * 100, 100);
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isAdding || isAdded || !isInStock) return;
+    
+    setIsAdding(true);
+    setTimeout(() => {
+      setIsAdding(false);
+      setIsAdded(true);
+      onAddToCart(product);
+      setTimeout(() => setIsAdded(false), 2000);
+    }, 350);
+  };
+
+  return (
+    <div className="group flex flex-col bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 relative">
+      {/* Badges - Only Stock and Discount badges remain */}
+      {hasDiscount && (
+        <div className="absolute top-3 left-3 z-10">
+          <span className="bg-red-500 text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
+            -{Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}%
+          </span>
+        </div>
+      )}
+      
+      {product.stock === 0 && (
+        <div className="absolute top-3 left-3 z-10">
+          <span className="bg-red-500 text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
+            Out of Stock
+          </span>
+        </div>
+      )}
+      
+      <div 
+        className="relative aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer"
+      >
+        <img 
+          src={product.images?.[0] || `https://placehold.co/400x400/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`} 
+          alt={product.name} 
+          className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          onError={(e) => { 
+            e.target.src = `https://placehold.co/400x400/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`;
+          }}
+        />
+        
+        {/* Quick Add Overlay - Only Add to Cart on hover */}
+        <div className="absolute bottom-0 inset-x-0 p-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+          <button 
+            onClick={handleAdd}
+            disabled={isAdding || isAdded || !isInStock}
+            className={`w-full font-semibold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider ${
+              !isInStock
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
+            }`}
+          >
+            {isAdding ? (
+              <><FiLoader className="w-4 h-4 animate-spin" /> Adding...</>
+            ) : isAdded ? (
+              <><FiCheck className="w-4 h-4 text-emerald-500" /> Added to Cart</>
+            ) : !isInStock ? (
+              'Out of Stock'
+            ) : (
+              <><FiShoppingCart className="w-4 h-4" /> Add to Cart</>
+            )}
+          </button>
+        </div>
+      </div>
+      
+      <div className="p-4 flex flex-col flex-grow">
         {/* Category */}
-        <p className="text-xs font-medium text-primary-500 uppercase tracking-wider">
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#7C3AED] mb-1">
           {product.category?.name}
-        </p>
+        </div>
         
         {/* Product Name */}
         <Link to={`/product/${product._id}`}>
-          <h3 className="font-semibold text-gray-800 hover:text-primary-600 transition-colors line-clamp-1 text-sm md:text-base mt-1">
+          <h3 className="text-sm font-semibold text-gray-900 mb-1.5 line-clamp-1 hover:text-[#7C3AED] cursor-pointer transition-colors">
             {product.name}
           </h3>
         </Link>
         
-        {/* Price & Stock */}
-        <div className="mt-2 flex items-center justify-between">
-          <span className="text-lg md:text-xl font-bold text-gray-900">
-            {formatPrice(product.price)}
-          </span>
-          {isLowStock && isInStock && (
-            <span className="text-xs font-medium text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full border border-yellow-200">
-              Only {product.stock} left!
+        {/* Star Rating */}
+        <div className="flex items-center gap-1.5 mb-2">
+          <div className="flex text-amber-400 text-[10px]">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span key={star}>★</span>
+            ))}
+          </div>
+          <span className="text-[10px] text-gray-500 font-medium">(24)</span>
+        </div>
+        
+        {/* Price Section - Left Aligned, Stacked */}
+        <div className="mt-auto">
+          <div className="flex flex-col items-start gap-0.5">
+            {/* Old Price - Striked out and faded */}
+            {hasDiscount && (
+              <span className="text-xs text-gray-400 line-through">
+                {formatPrice(originalPrice)}
+              </span>
+            )}
+            {/* New Price */}
+            <span className={`text-lg font-bold ${hasDiscount ? 'text-red-600' : 'text-[#5B21B6]'}`}>
+              {formatPrice(currentPrice)}
             </span>
+          </div>
+          
+          {/* Items Left with Progress Bar */}
+          {isInStock && (
+            <div className="mt-2">
+              <div className="flex items-center justify-between text-[10px] text-gray-500 mb-0.5">
+                <span className="font-medium">{product.stock} items left</span>
+                <span className="text-gray-400">{Math.round(stockPercentage)}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    product.stock <= 10 ? 'bg-red-500' : 
+                    product.stock <= 25 ? 'bg-yellow-500' : 
+                    'bg-green-500'
+                  }`}
+                  style={{ width: `${stockPercentage}%` }}
+                />
+              </div>
+            </div>
+          )}
+          
+          {/* Stock Status Text (if out of stock) */}
+          {!isInStock && (
+            <div className="mt-2">
+              <span className="text-xs font-medium text-red-600">Out of Stock</span>
+            </div>
           )}
         </div>
-
-        {/* Add to Cart Button */}
-        <button
-          onClick={handleAddToCart}
-          disabled={!isInStock}
-          className={`mt-3 w-full py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-            isInStock
-              ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-          }`}
-        >
-          <FiShoppingCart size={18} />
-          {isInStock ? 'Add to Cart' : 'Out of Stock'}
-        </button>
       </div>
     </div>
   );

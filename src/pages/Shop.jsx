@@ -10,14 +10,19 @@ import {
 } from 'react-icons/fi';
 import { IoSparkles } from 'react-icons/io5';
 
+// Import background image
+import heroCategoryBg from '../assets/images/hero_category.jpg';
+
 // Fallback mock data for when API fails
 const FALLBACK_PRODUCTS = [
   {
     _id: '1',
     name: 'Professional Hair Dryer',
     description: 'High-performance professional hair dryer with ionic technology for faster drying and less damage.',
-    price: 45000,
-    stock: 25,
+    price: 29750,
+    originalPrice: 35000,
+    stock: 12,
+    maxStock: 50,
     sku: 'HD-001',
     images: ['https://images.unsplash.com/photo-1519415387722-a1c3bbef9e54?w=400'],
     category: { _id: 'cat1', name: 'Salon Equipment', slug: 'salon-equipment' },
@@ -29,8 +34,10 @@ const FALLBACK_PRODUCTS = [
     _id: '2',
     name: 'Premium Shampoo Set',
     description: 'Complete hair care set with shampoo, conditioner, and treatment mask for all hair types.',
-    price: 8500,
-    stock: 50,
+    price: 7225,
+    originalPrice: 8500,
+    stock: 40,
+    maxStock: 120,
     sku: 'SS-002',
     images: ['https://images.unsplash.com/photo-1553531381-41c9ea81f06d?w=400'],
     category: { _id: 'cat2', name: 'Hair Products', slug: 'hair-products' },
@@ -42,8 +49,10 @@ const FALLBACK_PRODUCTS = [
     _id: '3',
     name: 'Salon Chair Set',
     description: 'Comfortable and adjustable salon chair set for professional use.',
-    price: 29999,
-    stock: 10,
+    price: 102000,
+    originalPrice: 120000,
+    stock: 4,
+    maxStock: 20,
     sku: 'SC-003',
     images: ['https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400'],
     category: { _id: 'cat1', name: 'Salon Equipment', slug: 'salon-equipment' },
@@ -55,8 +64,10 @@ const FALLBACK_PRODUCTS = [
     _id: '4',
     name: 'Nail Polish Collection',
     description: 'Complete nail polish collection with 48 vibrant colors and professional finish.',
-    price: 7999,
+    price: 6800,
+    originalPrice: 7999,
     stock: 30,
+    maxStock: 90,
     sku: 'NC-004',
     images: ['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400'],
     category: { _id: 'cat4', name: 'Nails & Accessories', slug: 'nails-accessories' },
@@ -68,8 +79,10 @@ const FALLBACK_PRODUCTS = [
     _id: '5',
     name: 'Eyelash Extension Kit',
     description: 'Professional eyelash extension kit with multiple lengths and types.',
-    price: 12999,
+    price: 11050,
+    originalPrice: 12999,
     stock: 15,
+    maxStock: 45,
     sku: 'EK-005',
     images: ['https://images.unsplash.com/photo-1586841559683-f84c22106e4f?w=400'],
     category: { _id: 'cat5', name: 'Eyelashes & Accessories', slug: 'eyelashes-accessories' },
@@ -81,8 +94,10 @@ const FALLBACK_PRODUCTS = [
     _id: '6',
     name: 'Premium Weavon Bundle',
     description: 'High-quality human hair weavon bundle for natural look and feel.',
-    price: 15999,
+    price: 13600,
+    originalPrice: 15999,
     stock: 20,
+    maxStock: 60,
     sku: 'WB-006',
     images: ['https://images.unsplash.com/photo-1525130413817-d45c1d127c42?w=400'],
     category: { _id: 'cat6', name: 'Weavons', slug: 'weavons' },
@@ -127,7 +142,7 @@ const StarRating = ({ rating }) => {
   );
 };
 
-// Product Card Component
+// Product Card Component - With Old Price, New Price, Items Left, Progress Bar
 const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggleWishlist }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -141,18 +156,17 @@ const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggle
     }).format(price);
   };
 
-  const getStockStatus = () => {
-    if (product.stock === 0) return { text: 'Out of Stock', color: 'bg-red-500' };
-    if (product.stock <= 10) return { text: 'Low Stock', color: 'bg-yellow-500' };
-    return { text: 'In Stock', color: 'bg-green-500' };
-  };
-
-  const stockStatus = getStockStatus();
+  const isInStock = product.stock > 0;
+  const currentPrice = product.price;
+  const originalPrice = product.originalPrice || product.price;
+  const hasDiscount = originalPrice > currentPrice;
+  const maxStock = product.maxStock || 100;
+  const stockPercentage = Math.min((product.stock / maxStock) * 100, 100);
 
   const handleAdd = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isAdding || isAdded || product.stock === 0) return;
+    if (isAdding || isAdded || !isInStock) return;
     
     setIsAdding(true);
     setTimeout(() => {
@@ -166,60 +180,23 @@ const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggle
   return (
     <div className="group flex flex-col bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 relative">
       {/* Badges */}
-      {product.featured && (
+      {hasDiscount && (
         <div className="absolute top-3 left-3 z-10">
-          <span className="bg-gray-900 text-white text-[11px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            Featured
+          <span className="bg-red-500 text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
+            -{Math.round(((originalPrice - currentPrice) / originalPrice) * 100)}%
           </span>
         </div>
       )}
       
-      {/* Stock Status Badge */}
       {product.stock === 0 && (
         <div className="absolute top-3 left-3 z-10">
-          <span className="bg-red-500 text-white text-[11px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
+          <span className="bg-red-500 text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
             Out of Stock
           </span>
         </div>
       )}
       
-      {product.stock > 0 && product.stock <= 10 && (
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-yellow-500 text-white text-[11px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md">
-            Low Stock
-          </span>
-        </div>
-      )}
-      
-      {/* Wishlist button */}
-      <button 
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleWishlist(product);
-        }}
-        className={`absolute top-3 right-3 z-10 h-9 w-9 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
-          isWishlisted 
-            ? 'bg-rose-50 text-rose-500 border border-rose-200 scale-110' 
-            : 'bg-white/90 backdrop-blur-sm text-gray-400 hover:text-rose-500 hover:bg-white'
-        }`} 
-        aria-label="Add to wishlist"
-      >
-        <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-current text-rose-500' : ''}`} />
-      </button>
-
-      {/* Quick View Button */}
-      <button 
-        onClick={() => onQuickView(product)}
-        className="absolute top-14 right-3 z-10 h-9 w-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center text-gray-600 hover:text-blue-600 hover:bg-white transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0"
-        title="Quick View"
-      >
-        <FiEye className="w-4 h-4" />
-      </button>
-      
-      <div 
-        onClick={() => onQuickView(product)}
-        className="relative aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer"
-      >
+      <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer">
         <img 
           src={product.images?.[0] || `https://placehold.co/400x400/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`} 
           alt={product.name} 
@@ -233,18 +210,18 @@ const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggle
         <div className="absolute bottom-0 inset-x-0 p-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
           <button 
             onClick={handleAdd}
-            disabled={isAdding || isAdded || product.stock === 0}
+            disabled={isAdding || isAdded || !isInStock}
             className={`w-full font-semibold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider ${
-              product.stock === 0 
+              !isInStock
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-white/95 backdrop-blur-md text-gray-900 hover:bg-gray-900 hover:text-white'
+                : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
             }`}
           >
             {isAdding ? (
               <><FiLoader className="w-4 h-4 animate-spin" /> Adding...</>
             ) : isAdded ? (
               <><FiCheck className="w-4 h-4 text-emerald-500" /> Added to Cart</>
-            ) : product.stock === 0 ? (
+            ) : !isInStock ? (
               'Out of Stock'
             ) : (
               <><FiShoppingBag className="w-4 h-4" /> Quick Add</>
@@ -253,29 +230,70 @@ const ProductCard = ({ product, onAddToCart, onQuickView, isWishlisted, onToggle
         </div>
       </div>
       
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="text-[11px] font-bold uppercase tracking-widest text-blue-600 mb-1">{product.category?.name}</div>
-        <h3 
-          onClick={() => onQuickView(product)}
-          className="text-base font-semibold text-gray-900 mb-2 line-clamp-1 hover:text-blue-600 cursor-pointer transition-colors"
-        >
-          {product.name}
-        </h3>
-        
-        <div className="flex items-center gap-1.5 mb-3">
-          <StarRating rating={4.5} />
-          <span className="text-xs text-gray-500 font-medium">(24)</span>
+      <div className="p-4 flex flex-col flex-grow">
+        {/* Category */}
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#7C3AED] mb-1">
+          {product.category?.name}
         </div>
         
-        <div className="mt-auto flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-lg font-bold text-gray-900">
-              {formatPrice(product.price)}
-            </span>
-            <span className={`text-xs font-medium ${stockStatus.text === 'In Stock' ? 'text-green-600' : stockStatus.text === 'Low Stock' ? 'text-yellow-600' : 'text-red-600'}`}>
-              {stockStatus.text}
+        {/* Product Name */}
+        <Link to={`/product/${product._id}`}>
+          <h3 className="text-sm font-semibold text-gray-900 mb-1.5 line-clamp-1 hover:text-[#7C3AED] cursor-pointer transition-colors">
+            {product.name}
+          </h3>
+        </Link>
+        
+        {/* Star Rating */}
+        <div className="flex items-center gap-1.5 mb-2">
+          <div className="flex text-amber-400 text-[10px]">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span key={star}>★</span>
+            ))}
+          </div>
+          <span className="text-[10px] text-gray-500 font-medium">(24)</span>
+        </div>
+        
+        {/* Price Section - Left Aligned, Stacked */}
+        <div className="mt-auto">
+          <div className="flex flex-col items-start gap-0.5">
+            {/* Old Price - Striked out and faded */}
+            {hasDiscount && (
+              <span className="text-xs text-gray-400 line-through">
+                {formatPrice(originalPrice)}
+              </span>
+            )}
+            {/* New Price */}
+            <span className={`text-lg font-bold ${hasDiscount ? 'text-red-600' : 'text-[#5B21B6]'}`}>
+              {formatPrice(currentPrice)}
             </span>
           </div>
+          
+          {/* Items Left with Progress Bar */}
+          {isInStock && (
+            <div className="mt-2">
+              <div className="flex items-center justify-between text-[10px] text-gray-500 mb-0.5">
+                <span className="font-medium">{product.stock} items left</span>
+                <span className="text-gray-400">{Math.round(stockPercentage)}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    product.stock <= 10 ? 'bg-red-500' : 
+                    product.stock <= 25 ? 'bg-yellow-500' : 
+                    'bg-green-500'
+                  }`}
+                  style={{ width: `${stockPercentage}%` }}
+                />
+              </div>
+            </div>
+          )}
+          
+          {/* Stock Status Text (if out of stock) */}
+          {!isInStock && (
+            <div className="mt-2">
+              <span className="text-xs font-medium text-red-600">Out of Stock</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -317,7 +335,7 @@ const QuickViewModal = ({ product, onClose, onAddToCart }) => {
         </div>
 
         <div className="md:w-1/2 p-6 flex flex-col overflow-y-auto">
-          <div className="text-xs uppercase font-bold text-blue-600 tracking-widest mb-1">{product.category?.name}</div>
+          <div className="text-xs uppercase font-bold text-[#7C3AED] tracking-widest mb-1">{product.category?.name}</div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h2>
           
           <div className="flex items-center gap-2 mb-4">
@@ -325,7 +343,7 @@ const QuickViewModal = ({ product, onClose, onAddToCart }) => {
             <span className="text-xs text-gray-500">(24 reviews)</span>
           </div>
 
-          <div className="text-2xl font-bold text-gray-900 mb-4">{formatPrice(product.price)}</div>
+          <div className="text-2xl font-bold text-[#5B21B6] mb-4">{formatPrice(product.price)}</div>
           
           <p className="text-xs text-gray-600 mb-6 leading-relaxed">{product.description}</p>
 
@@ -351,7 +369,7 @@ const QuickViewModal = ({ product, onClose, onAddToCart }) => {
                 disabled={product.stock === 0}
                 className={`flex-1 py-3 font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-lg ${
                   product.stock > 0
-                    ? 'bg-gray-900 hover:bg-blue-600 text-white'
+                    ? 'bg-[#7C3AED] hover:bg-[#6D28D9] text-white'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
@@ -394,7 +412,7 @@ const SearchModal = ({ isOpen, onClose, products, onQuickView }) => {
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl z-10">
         <div className="flex items-center gap-3 border-b border-gray-200 pb-4">
-          <FiSearch className="w-6 h-6 text-gray-400" />
+          <FiSearch className="w-6 h-6 text-[#7C3AED]" />
           <input 
             type="text" 
             placeholder="Search products by name or category..." 
@@ -420,7 +438,7 @@ const SearchModal = ({ isOpen, onClose, products, onQuickView }) => {
                 onQuickView(product);
                 onClose();
               }}
-              className="py-3 flex items-center gap-4 hover:bg-gray-50 p-2 rounded-lg cursor-pointer transition-colors"
+              className="py-3 flex items-center gap-4 hover:bg-purple-50 p-2 rounded-lg cursor-pointer transition-colors"
             >
               <img 
                 src={product.images?.[0] || `https://placehold.co/50x50/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`} 
@@ -429,9 +447,9 @@ const SearchModal = ({ isOpen, onClose, products, onQuickView }) => {
               />
               <div className="flex-1">
                 <h4 className="font-semibold text-gray-900 text-sm">{product.name}</h4>
-                <span className="text-xs text-blue-600 font-medium">{product.category?.name}</span>
+                <span className="text-xs text-[#7C3AED] font-medium">{product.category?.name}</span>
               </div>
-              <span className="font-bold text-gray-900 text-sm">{formatPrice(product.price)}</span>
+              <span className="font-bold text-[#5B21B6] text-sm">{formatPrice(product.price)}</span>
             </div>
           ))}
         </div>
@@ -648,20 +666,30 @@ const Shop = () => {
 
   return (
     <div className="pt-16 bg-gray-50 min-h-screen">
-      {/* Hero Banner */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12 md:py-16">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200')] bg-cover bg-center"></div>
+      {/* Hero Banner with Background Image */}
+      <section className="relative py-20 md:py-28 lg:py-32 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 w-full h-full z-0">
+          <img 
+            src={heroCategoryBg} 
+            alt="Our Collection Background" 
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Dark Overlay for better text readability */}
+          <div className="absolute inset-0 bg-[#6D28D9]/70 mix-blend-multiply"></div>
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <IoSparkles className="w-5 h-5 text-amber-400" />
-                <span className="text-xs font-bold uppercase tracking-widest text-amber-400">Shop</span>
+                
+          
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold">
-                {filters.search ? `Search Results: "${filters.search}"` : 'Our Collection'}
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                {filters.search ? `Search Results: "${filters.search}"` : 'Explore our exotic collections'}
               </h1>
-              <p className="text-gray-300 mt-1">
+              <p className="text-white/80 mt-1 text-base">
                 {pagination.total > 0 ? `${pagination.total} products found` : 'Browse our extensive catalogue'}
                 {usingFallback && (
                   <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full">
@@ -674,7 +702,7 @@ const Shop = () => {
               {/* Search Button */}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
+                className="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors text-white"
                 title="Search"
               >
                 <FiSearch className="w-5 h-5" />
@@ -726,7 +754,7 @@ const Shop = () => {
             <div className="bg-white rounded-2xl shadow-elegant p-6 sticky top-24 border border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
-                  <FiSliders className="w-5 h-5 text-blue-600" />
+                  <FiSliders className="w-5 h-5 text-[#6D28D9]" />
                   Filters
                 </h3>
                 <button
@@ -748,7 +776,7 @@ const Shop = () => {
                       placeholder="Search products..."
                       value={filters.search}
                       onChange={(e) => handleFilterChange('search', e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent outline-none transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -759,7 +787,7 @@ const Shop = () => {
                   <select
                     value={filters.category}
                     onChange={(e) => handleFilterChange('category', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm appearance-none"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent outline-none transition-all text-sm appearance-none"
                   >
                     <option value="">All Categories</option>
                     {categories.map((cat) => (
@@ -779,7 +807,7 @@ const Shop = () => {
                       placeholder="Min"
                       value={filters.minPrice}
                       onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                      className="w-1/2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                      className="w-1/2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent outline-none transition-all text-sm"
                       min="0"
                     />
                     <input
@@ -787,7 +815,7 @@ const Shop = () => {
                       placeholder="Max"
                       value={filters.maxPrice}
                       onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                      className="w-1/2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                      className="w-1/2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent outline-none transition-all text-sm"
                       min="0"
                     />
                   </div>
@@ -799,7 +827,7 @@ const Shop = () => {
                   <select
                     value={filters.sort}
                     onChange={(e) => handleFilterChange('sort', e.target.value)}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm appearance-none"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6D28D9] focus:border-transparent outline-none transition-all text-sm appearance-none"
                   >
                     <option value="newest">Newest First</option>
                     <option value="price_asc">Price: Low to High</option>
@@ -815,36 +843,36 @@ const Shop = () => {
                     <p className="text-xs text-gray-500 mb-2">Active Filters:</p>
                     <div className="flex flex-wrap gap-2">
                       {filters.category && (
-                        <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full flex items-center border border-blue-200">
+                        <span className="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full flex items-center border border-purple-200">
                           {getCategoryName(filters.category)}
                           <button
                             onClick={() => handleFilterChange('category', '')}
-                            className="ml-1.5 hover:text-blue-900"
+                            className="ml-1.5 hover:text-purple-900"
                           >
                             <FiX size={12} />
                           </button>
                         </span>
                       )}
                       {filters.search && (
-                        <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full flex items-center border border-blue-200">
+                        <span className="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full flex items-center border border-purple-200">
                           "{filters.search}"
                           <button
                             onClick={() => handleFilterChange('search', '')}
-                            className="ml-1.5 hover:text-blue-900"
+                            className="ml-1.5 hover:text-purple-900"
                           >
                             <FiX size={12} />
                           </button>
                         </span>
                       )}
                       {(filters.minPrice || filters.maxPrice) && (
-                        <span className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full flex items-center border border-blue-200">
+                        <span className="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full flex items-center border border-purple-200">
                           ₦{filters.minPrice || '0'} - ₦{filters.maxPrice || '∞'}
                           <button
                             onClick={() => {
                               handleFilterChange('minPrice', '');
                               handleFilterChange('maxPrice', '');
                             }}
-                            className="ml-1.5 hover:text-blue-900"
+                            className="ml-1.5 hover:text-purple-900"
                           >
                             <FiX size={12} />
                           </button>
@@ -856,7 +884,7 @@ const Shop = () => {
 
                 <button
                   onClick={clearFilters}
-                  className="w-full py-2.5 bg-gray-900 text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors text-sm"
+                  className="w-full py-2.5 bg-[#6D28D9] text-white font-semibold rounded-xl hover:bg-[#2563EB] transition-colors text-sm"
                 >
                   Clear All Filters
                 </button>
@@ -864,7 +892,7 @@ const Shop = () => {
                 {usingFallback && (
                   <button
                     onClick={fetchProducts}
-                    className="w-full py-2.5 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors text-sm flex items-center justify-center gap-2"
+                    className="w-full py-2.5 bg-[#2563EB] text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors text-sm flex items-center justify-center gap-2"
                   >
                     <FiRefreshCw className="w-4 h-4" /> Connect to Server
                   </button>
@@ -889,7 +917,7 @@ const Shop = () => {
                 {(filters.search || filters.category || filters.minPrice || filters.maxPrice) && (
                   <button
                     onClick={clearFilters}
-                    className="px-6 py-2.5 bg-gray-900 text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors"
+                    className="px-6 py-2.5 bg-[#6D28D9] text-white font-semibold rounded-xl hover:bg-[#2563EB] transition-colors"
                   >
                     Clear Filters
                   </button>
@@ -954,7 +982,7 @@ const Shop = () => {
                               onClick={() => handlePageChange(pageNum)}
                               className={`w-10 h-10 rounded-xl transition-colors text-sm font-medium ${
                                 pageNum === pagination.page
-                                  ? 'bg-gray-900 text-white'
+                                  ? 'bg-[#6D28D9] text-white'
                                   : 'border border-gray-300 hover:bg-gray-50'
                               }`}
                             >
@@ -998,8 +1026,8 @@ const Shop = () => {
       {/* Toast Notifications */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none">
         {toasts.map(toast => (
-          <div key={toast.id} className="bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-bounce">
-            <FiCheckCircle className="w-4 h-4 text-emerald-400" />
+          <div key={toast.id} className="bg-[#171047] text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-bounce">
+            <FiCheckCircle className="w-4 h-4 text-[#6D28D9]" />
             <span>{toast.message}</span>
           </div>
         ))}

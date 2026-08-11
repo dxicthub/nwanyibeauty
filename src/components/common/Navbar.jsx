@@ -68,9 +68,10 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
-        ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-purple-100/30' 
-        : 'bg-white backdrop-blur-sm border-b border-transparent'
+        ? 'bg-white/92 backdrop-blur-xl shadow-[0_8px_30px_rgba(59,27,90,0.08)] border-b border-purple-100/70' 
+        : 'bg-white/96 backdrop-blur-md border-b border-purple-100/50 shadow-[0_4px_18px_rgba(59,27,90,0.04)]'
     }`}>
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D8C4F2] to-transparent"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -80,7 +81,7 @@ const Navbar = () => {
               alt="Nyanyi Beauty Logo" 
               className="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover shadow-lg group-hover:shadow-xl transition-all duration-300"
             />
-            <span className="text-xl font-bold text-gray-800 group-hover:text-[#7C3AED] transition-colors">
+            <span className="text-xl font-extrabold tracking-tight text-[#35145F] group-hover:text-[#7C3AED] transition-colors">
               {settings?.businessName || 'Nyanyi Beauty'}
             </span>
           </Link>
@@ -91,7 +92,7 @@ const Navbar = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-[#7C3AED] transition-colors duration-200 rounded-xl hover:bg-purple-50"
+                className="px-4 py-2.5 text-sm font-semibold text-[#5B5566] hover:text-[#5B21B6] transition-all duration-200 rounded-full hover:bg-[#F5F0FF]"
               >
                 {link.label}
               </Link>
@@ -107,21 +108,21 @@ const Navbar = () => {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 lg:w-64 px-4 py-2 pl-10 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none transition-all text-sm"
+                className="w-48 lg:w-64 px-4 py-2.5 pl-10 bg-[#FAF8FF] border border-[#E8DDF7] rounded-full focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] outline-none transition-all text-sm text-[#35145F] placeholder:text-[#9A91A6] shadow-sm"
               />
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B7D9A]" size={18} />
             </form>
 
             {/* Wishlist */}
-            <button className="relative p-2 text-gray-600 hover:text-[#7C3AED] transition-colors rounded-xl hover:bg-purple-50">
+            <button className="relative p-2.5 text-[#5B5566] hover:text-[#6D28D9] transition-all rounded-full hover:bg-[#F5F0FF]">
               <FiHeart size={22} />
             </button>
 
             {/* Cart */}
-            <Link to="/cart" className="relative p-2 text-gray-600 hover:text-[#7C3AED] transition-colors rounded-xl hover:bg-purple-50">
+            <Link to="/cart" className="relative p-2.5 text-[#5B5566] hover:text-[#6D28D9] transition-all rounded-full hover:bg-[#F5F0FF]">
               <FiShoppingCart size={22} />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white text-[10px] font-extrabold rounded-full w-5 h-5 flex items-center justify-center shadow-md ring-2 ring-white">
                   {totalItems}
                 </span>
               )}
@@ -130,34 +131,34 @@ const Navbar = () => {
             {/* User Menu */}
             {isAuthenticated ? (
               <div className="relative group">
-                <button className="flex items-center gap-2 text-gray-700 hover:text-[#7C3AED] transition-colors px-3 py-2 rounded-xl hover:bg-purple-50">
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#7C3AED] to-[#2563EB] rounded-full flex items-center justify-center text-white text-sm font-semibold shadow-md">
+                <button className="flex items-center gap-2 text-[#403A48] hover:text-[#5B21B6] transition-all px-3 py-2 rounded-full hover:bg-[#F5F0FF]">
+                  <div className="w-8 h-8 bg-gradient-to-br from-[#5B21B6] via-[#7C3AED] to-[#2563EB] rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md ring-2 ring-[#F3EEFF]">
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
                   </div>
                   <span className="font-medium text-sm">{user?.firstName}</span>
-                  <FiChevronDown className="w-4 h-4 text-gray-400" />
+                  <FiChevronDown className="w-4 h-4 text-[#8B7D9A]" />
                 </button>
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-purple-100/50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute right-0 mt-3 w-60 bg-white rounded-2xl shadow-[0_18px_50px_rgba(59,27,90,0.16)] border border-[#E8DDF7] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="px-4 py-3 border-b border-purple-100/50">
                     <p className="font-semibold text-gray-800">{user?.firstName} {user?.lastName}</p>
                     <p className="text-xs text-gray-500">{user?.email}</p>
                   </div>
-                  <Link to="/account" className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-[#7C3AED] transition-colors">
-                    <FiUser className="mr-3 text-gray-400" size={16} />
+                  <Link to="/account" className="flex items-center px-4 py-2.5 text-sm text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] transition-colors">
+                    <FiUser className="mr-3 text-[#8B7D9A]" size={16} />
                     Dashboard
                   </Link>
-                  <Link to="/account/orders" className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-[#7C3AED] transition-colors">
-                    <FiPackage className="mr-3 text-gray-400" size={16} />
+                  <Link to="/account/orders" className="flex items-center px-4 py-2.5 text-sm text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] transition-colors">
+                    <FiPackage className="mr-3 text-[#8B7D9A]" size={16} />
                     My Orders
                   </Link>
-                  <Link to="/account/profile" className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-[#7C3AED] transition-colors">
-                    <FiSettings className="mr-3 text-gray-400" size={16} />
+                  <Link to="/account/profile" className="flex items-center px-4 py-2.5 text-sm text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] transition-colors">
+                    <FiSettings className="mr-3 text-[#8B7D9A]" size={16} />
                     Settings
                   </Link>
                   {user?.role === 'admin' && (
                     <>
                       <hr className="my-2 border-purple-100/50" />
-                      <Link to="/admin/dashboard" className="flex items-center px-4 py-2.5 text-sm text-[#7C3AED] hover:bg-purple-50 transition-colors">
+                      <Link to="/admin/dashboard" className="flex items-center px-4 py-2.5 text-sm text-[#6D28D9] hover:bg-[#F7F3FF] transition-colors">
                         <FiSettings className="mr-3" size={16} />
                         Admin Panel
                       </Link>
@@ -171,7 +172,7 @@ const Navbar = () => {
                 </div>
               </div>
             ) : (
-              <Link to="/login" className="px-6 py-2.5 bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white text-sm font-semibold rounded-xl hover:from-[#6D28D9] hover:to-[#1D4ED8] transition-all duration-300 shadow-md hover:shadow-lg">
+              <Link to="/login" className="px-6 py-2.5 bg-gradient-to-r from-[#6D28D9] via-[#7C3AED] to-[#2563EB] text-white text-sm font-bold rounded-full hover:from-[#5B21B6] hover:via-[#6D28D9] hover:to-[#1D4ED8] transition-all duration-300 shadow-[0_8px_20px_rgba(124,58,237,0.22)] hover:shadow-[0_10px_25px_rgba(124,58,237,0.30)]">
                 Sign In
               </Link>
             )}
@@ -180,7 +181,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-gray-700 hover:text-[#7C3AED] transition-colors rounded-xl hover:bg-purple-50"
+            className="md:hidden p-2.5 text-[#403A48] hover:text-[#6D28D9] transition-all rounded-full hover:bg-[#F5F0FF]"
           >
             {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
@@ -188,16 +189,16 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-purple-100/30 animate-slide-down">
+          <div className="md:hidden py-5 border-t border-[#EDE6F5] animate-slide-down">
             <div className="space-y-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 rounded-xl transition-colors"
+                  className="flex items-center px-4 py-3 text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] rounded-2xl transition-all"
                 >
-                  <link.icon className="mr-3 text-gray-400" size={20} />
+                  <link.icon className="mr-3 text-[#8B7D9A]" size={20} />
                   {link.label}
                 </Link>
               ))}
@@ -209,23 +210,23 @@ const Navbar = () => {
                     placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-10 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 pl-10 bg-[#FAF8FF] border border-[#E8DDF7] rounded-2xl focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] outline-none transition-all text-[#35145F]"
                   />
-                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B7D9A]" size={18} />
                 </div>
               </form>
 
               <Link
                 to="/cart"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-purple-50 rounded-xl transition-colors"
+                className="flex items-center justify-between px-4 py-3 text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] rounded-2xl transition-all"
               >
                 <div className="flex items-center">
-                  <FiShoppingCart className="mr-3 text-gray-400" size={20} />
+                  <FiShoppingCart className="mr-3 text-[#8B7D9A]" size={20} />
                   <span>Cart</span>
                 </div>
                 {totalItems > 0 && (
-                  <span className="bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
+                  <span className="bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white text-[10px] font-extrabold rounded-full w-6 h-6 flex items-center justify-center shadow-md ring-2 ring-white">
                     {totalItems}
                   </span>
                 )}
@@ -234,9 +235,9 @@ const Navbar = () => {
               <Link
                 to="/wishlist"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 rounded-xl transition-colors"
+                className="flex items-center px-4 py-3 text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] rounded-2xl transition-all"
               >
-                <FiHeart className="mr-3 text-gray-400" size={20} />
+                <FiHeart className="mr-3 text-[#8B7D9A]" size={20} />
                 Wishlist
               </Link>
 
@@ -245,9 +246,9 @@ const Navbar = () => {
                   <Link
                     to="/account"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 rounded-xl transition-colors"
+                    className="flex items-center px-4 py-3 text-[#4B4452] hover:bg-[#F7F3FF] hover:text-[#5B21B6] rounded-2xl transition-all"
                   >
-                    <FiUser className="mr-3 text-gray-400" size={20} />
+                    <FiUser className="mr-3 text-[#8B7D9A]" size={20} />
                     Dashboard
                   </Link>
                   {user?.role === 'admin' && (
@@ -262,7 +263,7 @@ const Navbar = () => {
                   )}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                    className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-2xl transition-all"
                   >
                     <FiLogOut className="mr-3 text-red-400" size={20} />
                     Logout
@@ -272,7 +273,7 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="block w-full text-center px-4 py-3 bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white font-semibold rounded-xl"
+                  className="block w-full text-center px-4 py-3.5 bg-gradient-to-r from-[#6D28D9] via-[#7C3AED] to-[#2563EB] text-white font-bold rounded-2xl shadow-[0_8px_20px_rgba(124,58,237,0.20)]"
                 >
                   Sign In
                 </Link>
