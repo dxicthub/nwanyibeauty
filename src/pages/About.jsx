@@ -5,11 +5,11 @@ const About = () => {
     <div className="pt-16">
       <section className="py-16 bg-gray-50">
         <div className="container-custom">
-          <h1 className="text-4xl font-display font-bold text-center mb-8">About Luxiline Beauty</h1>
+          <h1 className="text-4xl font-display font-bold text-center mb-8">About Nwanyi Onitsha</h1>
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg">
               <p className="text-lg text-gray-700 mb-6">
-                Luxiline Beauty is a premier wholesale supplier of beauty, hair, and salon products. 
+                Nwanyi Onitsha is a premier wholesale supplier of beauty, hair, and salon products. 
                 We are dedicated to providing high-quality products at competitive prices to salons, 
                 beauty professionals, and retailers across the country.
               </p>
