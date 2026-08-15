@@ -133,58 +133,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Quick Action Cards - Moved ABOVE the contact form for better visibility */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
-        <div className="grid md:grid-cols-3 gap-4">
-          {/* Call Card */}
-          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
-            <div className="w-14 h-14 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#6D28D9] transition-colors duration-300">
-              <FiPhoneCall className="w-7 h-7 text-[#6D28D9] group-hover:text-white transition-colors duration-300" aria-hidden="true" />
-            </div>
-            <h3 className="font-semibold text-[#241238] mb-1">Call Us</h3>
-            <p className="text-sm text-[#6B6475] mb-3">{contactData.phoneNumber}</p>
-            <button
-              onClick={handlePhoneCall}
-              className="w-full bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white py-2.5 rounded-xl font-semibold hover:from-[#5B21B6] hover:to-[#1D4ED8] transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
-            >
-              <FiPhone className="text-lg" aria-hidden="true" />
-              Call Now
-            </button>
-          </div>
-
-          {/* WhatsApp Card */}
-          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
-            <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500 transition-colors duration-300">
-              <FaWhatsapp className="w-7 h-7 text-green-600 group-hover:text-white transition-colors duration-300" aria-hidden="true" />
-            </div>
-            <h3 className="font-semibold text-[#241238] mb-1">WhatsApp</h3>
-            <p className="text-sm text-[#6B6475] mb-3">{contactData.whatsappNumber}</p>
-            <button
-              onClick={handleWhatsApp}
-              className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
-            >
-              <FaWhatsapp className="text-lg" aria-hidden="true" />
-              Chat Now
-            </button>
-          </div>
-
-          {/* Email Card */}
-          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
-            <div className="w-14 h-14 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#6D28D9] transition-colors duration-300">
-              <FiMail className="w-7 h-7 text-[#6D28D9] group-hover:text-white transition-colors duration-300" aria-hidden="true" />
-            </div>
-            <h3 className="font-semibold text-[#241238] mb-1">Email Us</h3>
-            <p className="text-sm text-[#6B6475] mb-3">{contactData.businessEmail}</p>
-            <button
-              onClick={handleEmailClick}
-              className="w-full bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white py-2.5 rounded-xl font-semibold hover:from-[#5B21B6] hover:to-[#1D4ED8] transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
-            >
-              <FiMail className="text-lg" aria-hidden="true" />
-              Email Now
-            </button>
-          </div>
-        </div>
-      </div>
+      
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-8">
