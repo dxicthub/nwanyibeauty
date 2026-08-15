@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiAward, FiUsers, FiTruck, FiShield, FiStar, FiHeart, FiArrowRight } from 'react-icons/fi';
+import { 
+  FiAward, 
+  FiUsers, 
+  FiTruck, 
+  FiShield, 
+  FiStar, 
+  FiHeart, 
+  FiArrowRight,
+  FiMapPin,    // Added this import
+  FiClock,     // Added this import
+  FiPhone      // Added this import
+} from 'react-icons/fi';
 import { IoSparkles } from 'react-icons/io5';
 
 // Import hero banner image
@@ -54,9 +65,7 @@ const About = () => {
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-              <IoSparkles className="w-8 h-8 text-white" />
-            </div>
+            
           </div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 leading-tight">
             About <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200">Nyanyi Onitsha</span>
@@ -74,7 +83,7 @@ const About = () => {
             {stats.map((stat, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 text-center border border-[#E9DDF7] shadow-[0_4px_20px_rgba(109,40,217,0.06)]">
                 <div className="w-12 h-12 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-3">
-                  <stat.icon className="w-6 h-6 text-[#6D28D9]" />
+                  <stat.icon className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
                 </div>
                 <p className="text-2xl font-bold text-[#241238]">{stat.value}</p>
                 <p className="text-sm text-[#6B6475]">{stat.label}</p>
@@ -106,7 +115,7 @@ const About = () => {
                 carefully curated to meet the diverse needs of the beauty and salon industry.
               </p>
               <Link to="/shop" className="inline-flex items-center text-[#6D28D9] hover:text-[#5B21B6] font-semibold">
-                Explore Our Products <FiArrowRight className="ml-2" />
+                Explore Our Products <FiArrowRight className="ml-2" aria-hidden="true" />
               </Link>
             </div>
             <div className="relative">
@@ -120,7 +129,7 @@ const About = () => {
               <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-4 border border-[#E9DDF7]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#F7F3FF] rounded-full flex items-center justify-center">
-                    <FiAward className="w-5 h-5 text-[#6D28D9]" />
+                    <FiAward className="w-5 h-5 text-[#6D28D9]" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#241238]">Trusted Supplier</p>
@@ -133,9 +142,79 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Values */}
+      {/* Google Maps Section */}
       <section className="py-16 bg-[#FAF9FF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#6D28D9] bg-[#F7F3FF] px-3 py-1 rounded-full border border-[#E9DDF7]">
+              Our Location
+            </span>
+            <h2 className="text-3xl font-bold text-[#241238] mt-4">
+              Find Us
+            </h2>
+            <p className="text-sm text-[#6B6475] mt-2 max-w-2xl mx-auto">
+              Visit us at our headquarters in Onitsha, Nigeria
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl overflow-hidden border border-[#E9DDF7] shadow-[0_4px_20px_rgba(109,40,217,0.06)]">
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.4733819518956!2d6.732025274130262!3d6.201109826827562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1043f300159067d1%3A0xdfaa49c15beed46f!2sNwanyi%20Onitsha%20Global%20Concept!5e0!3m2!1sen!2sng!4v1786779001007!5m2!1sen!2sng"
+                className="absolute top-0 left-0 w-full h-full"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Nyanyi Onitsha Location Map"
+              />
+            </div>
+          </div>
+
+          {/* Quick Location Info */}
+          <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <div className="bg-white rounded-2xl p-6 border border-[#E9DDF7] text-center">
+              <div className="w-12 h-12 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiMapPin className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
+              </div>
+              <h3 className="font-semibold text-[#241238]">Address</h3>
+              <p className="text-sm text-[#6B6475] mt-1">
+                Nwanyi Onitsha Global Concept<br />
+                Onitsha, Nigeria
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 border border-[#E9DDF7] text-center">
+              <div className="w-12 h-12 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiClock className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
+              </div>
+              <h3 className="font-semibold text-[#241238]">Working Hours</h3>
+              <p className="text-sm text-[#6B6475] mt-1">
+                Mon - Sat: 8:00 AM - 8:00 PM<br />
+                Sunday: Closed
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 border border-[#E9DDF7] text-center">
+              <div className="w-12 h-12 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiPhone className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
+              </div>
+              <h3 className="font-semibold text-[#241238]">Contact</h3>
+              <p className="text-sm text-[#6B6475] mt-1">
+                <a href="tel:+2341234567890" className="hover:text-[#6D28D9] transition-colors">
+                  +234 812 364 5507
+                </a>
+                <br />
+                <a href="mailto:info@nyanyibeauty.com" className="hover:text-[#6D28D9] transition-colors">
+                  info@nwanyionitsha.com
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center justify-center">
           <div className="text-center mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-[#6D28D9] bg-[#F7F3FF] px-3 py-1 rounded-full border border-[#E9DDF7]">
               Our Values
@@ -150,9 +229,9 @@ const About = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 border border-[#E9DDF7] hover:shadow-lg transition-all duration-300">
+              <div key={index} className="bg-[#FAF9FF] rounded-2xl p-6 border border-[#E9DDF7] hover:shadow-lg transition-all duration-300">
                 <div className="w-12 h-12 bg-[#F7F3FF] rounded-xl flex items-center justify-center mb-4">
-                  <value.icon className="w-6 h-6 text-[#6D28D9]" />
+                  <value.icon className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
                 </div>
                 <h3 className="text-lg font-bold text-[#241238] mb-2">{value.title}</h3>
                 <p className="text-sm text-[#6B6475]">{value.description}</p>

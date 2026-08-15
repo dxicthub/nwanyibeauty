@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { 
   FiMapPin, FiPhone, FiMail, FiClock, FiSend, FiMessageCircle,
-  FiCheckCircle, FiAlertCircle, FiArrowRight
+  FiCheckCircle, FiAlertCircle, FiArrowRight, FiPhoneCall
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoSparkles } from 'react-icons/io5';
@@ -24,6 +24,19 @@ const Contact = () => {
     message: '',
   });
   const [errors, setErrors] = useState({});
+
+  // Fallback data if settings not available
+  const contactData = {
+    phoneNumber: settings?.phoneNumber || '+234 812 364 5507',
+    businessEmail: settings?.businessEmail || 'info@nwanyionitsha.com',
+    whatsappNumber: settings?.whatsappNumber || '+234 812 364 5507',
+    address: settings?.address || {
+      street: 'Nwanyi Onitsha',
+      city: 'Onitsha',
+      state: 'Anambra',
+      country: 'Nigeria'
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,11 +82,26 @@ const Contact = () => {
   };
 
   const handleWhatsApp = () => {
-    const number = settings?.whatsappNumber || '';
+    const number = contactData.whatsappNumber || '';
     const cleanNumber = number.replace(/\D/g, '');
-    const message = 'Hello, I would like to get in touch with Nyanyi Beauty.';
+    const message = 'Hello, I would like to get in touch with Nyanyi Onitsha.';
     if (cleanNumber) {
       window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+  };
+
+  const handlePhoneCall = () => {
+    const number = contactData.phoneNumber || '';
+    const cleanNumber = number.replace(/\D/g, '');
+    if (cleanNumber) {
+      window.location.href = `tel:${cleanNumber}`;
+    }
+  };
+
+  const handleEmailClick = () => {
+    const email = contactData.businessEmail || '';
+    if (email) {
+      window.location.href = `mailto:${email}`;
     }
   };
 
@@ -85,7 +113,7 @@ const Contact = () => {
         <div className="absolute inset-0 w-full h-full z-0">
           <img 
             src={heroAboutUs} 
-            alt="Contact Nyanyi Beauty" 
+            alt="Contact Nyanyi Onitsha" 
             className="w-full h-full object-cover object-center"
           />
           {/* Dark Overlay for better text readability */}
@@ -94,9 +122,7 @@ const Contact = () => {
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-              <IoSparkles className="w-8 h-8 text-white" />
-            </div>
+            
           </div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 leading-tight">
             Get In <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200">Touch</span>
@@ -107,6 +133,59 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* Quick Action Cards - Moved ABOVE the contact form for better visibility */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+        <div className="grid md:grid-cols-3 gap-4">
+          {/* Call Card */}
+          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
+            <div className="w-14 h-14 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#6D28D9] transition-colors duration-300">
+              <FiPhoneCall className="w-7 h-7 text-[#6D28D9] group-hover:text-white transition-colors duration-300" aria-hidden="true" />
+            </div>
+            <h3 className="font-semibold text-[#241238] mb-1">Call Us</h3>
+            <p className="text-sm text-[#6B6475] mb-3">{contactData.phoneNumber}</p>
+            <button
+              onClick={handlePhoneCall}
+              className="w-full bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white py-2.5 rounded-xl font-semibold hover:from-[#5B21B6] hover:to-[#1D4ED8] transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
+            >
+              <FiPhone className="text-lg" aria-hidden="true" />
+              Call Now
+            </button>
+          </div>
+
+          {/* WhatsApp Card */}
+          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
+            <div className="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500 transition-colors duration-300">
+              <FaWhatsapp className="w-7 h-7 text-green-600 group-hover:text-white transition-colors duration-300" aria-hidden="true" />
+            </div>
+            <h3 className="font-semibold text-[#241238] mb-1">WhatsApp</h3>
+            <p className="text-sm text-[#6B6475] mb-3">{contactData.whatsappNumber}</p>
+            <button
+              onClick={handleWhatsApp}
+              className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
+            >
+              <FaWhatsapp className="text-lg" aria-hidden="true" />
+              Chat Now
+            </button>
+          </div>
+
+          {/* Email Card */}
+          <div className="bg-white rounded-2xl border border-[#E9DDF7] p-6 text-center hover:shadow-xl transition-all duration-300 group shadow-lg">
+            <div className="w-14 h-14 bg-[#F7F3FF] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#6D28D9] transition-colors duration-300">
+              <FiMail className="w-7 h-7 text-[#6D28D9] group-hover:text-white transition-colors duration-300" aria-hidden="true" />
+            </div>
+            <h3 className="font-semibold text-[#241238] mb-1">Email Us</h3>
+            <p className="text-sm text-[#6B6475] mb-3">{contactData.businessEmail}</p>
+            <button
+              onClick={handleEmailClick}
+              className="w-full bg-gradient-to-r from-[#6D28D9] to-[#2563EB] text-white py-2.5 rounded-xl font-semibold hover:from-[#5B21B6] hover:to-[#1D4ED8] transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm"
+            >
+              <FiMail className="text-lg" aria-hidden="true" />
+              Email Now
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Contact Information */}
@@ -115,74 +194,64 @@ const Contact = () => {
               <h2 className="text-xl font-bold text-[#241238] mb-6">Get in Touch</h2>
               
               <div className="space-y-6">
-                {settings?.address && (
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <FiMapPin className="text-[#6D28D9] text-xl" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-[#241238]">Address</h3>
-                      <p className="text-[#6B6475] text-sm">
-                        {settings.address.street}<br />
-                        {settings.address.city}, {settings.address.state}<br />
-                        {settings.address.country}
-                      </p>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <FiMapPin className="text-[#6D28D9] text-xl" aria-hidden="true" />
                   </div>
-                )}
+                  <div>
+                    <h3 className="font-semibold text-[#241238]">Address</h3>
+                    <p className="text-[#6B6475] text-sm">
+                      {contactData.address.street}<br />
+                      {contactData.address.city}, {contactData.address.state}<br />
+                      {contactData.address.country}
+                    </p>
+                  </div>
+                </div>
 
-                {settings?.phoneNumber && (
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <FiPhone className="text-[#6D28D9] text-xl" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-[#241238]">Phone</h3>
-                      <a href={`tel:${settings.phoneNumber}`} className="text-[#6B6475] text-sm hover:text-[#6D28D9] transition-colors">
-                        {settings.phoneNumber}
-                      </a>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <FiPhone className="text-[#6D28D9] text-xl" aria-hidden="true" />
                   </div>
-                )}
+                  <div>
+                    <h3 className="font-semibold text-[#241238]">Phone</h3>
+                    <a href={`tel:${contactData.phoneNumber}`} className="text-[#6B6475] text-sm hover:text-[#6D28D9] transition-colors">
+                      {contactData.phoneNumber}
+                    </a>
+                  </div>
+                </div>
 
-                {settings?.businessEmail && (
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <FiMail className="text-[#6D28D9] text-xl" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-[#241238]">Email</h3>
-                      <a href={`mailto:${settings.businessEmail}`} className="text-[#6B6475] text-sm hover:text-[#6D28D9] transition-colors">
-                        {settings.businessEmail}
-                      </a>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-[#F7F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <FiMail className="text-[#6D28D9] text-xl" aria-hidden="true" />
                   </div>
-                )}
+                  <div>
+                    <h3 className="font-semibold text-[#241238]">Email</h3>
+                    <a href={`mailto:${contactData.businessEmail}`} className="text-[#6B6475] text-sm hover:text-[#6D28D9] transition-colors">
+                      {contactData.businessEmail}
+                    </a>
+                  </div>
+                </div>
 
-                {settings?.whatsappNumber && (
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <FaWhatsapp className="text-green-600 text-xl" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-[#241238]">WhatsApp</h3>
-                      <button onClick={handleWhatsApp} className="text-[#6B6475] text-sm hover:text-green-600 transition-colors">
-                        Chat with us
-                      </button>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <FaWhatsapp className="text-green-600 text-xl" aria-hidden="true" />
                   </div>
-                )}
+                  <div>
+                    <h3 className="font-semibold text-[#241238]">WhatsApp</h3>
+                    <button onClick={handleWhatsApp} className="text-[#6B6475] text-sm hover:text-green-600 transition-colors">
+                      Chat with us
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* WhatsApp Button */}
-              {settings?.whatsappNumber && (
-                <button
-                  onClick={handleWhatsApp}
-                  className="w-full mt-6 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-                >
-                  <FaWhatsapp className="text-xl" aria-hidden="true" /> Chat on WhatsApp
-                </button>
-              )}
+              <button
+                onClick={handleWhatsApp}
+                className="w-full mt-6 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              >
+                <FaWhatsapp className="text-xl" aria-hidden="true" /> Chat on WhatsApp
+              </button>
             </div>
           </div>
 
@@ -207,7 +276,7 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`input-field border-[#E9DDF7] focus:border-[#6D28D9] bg-[#FAF9FF] ${errors.name ? 'border-red-400' : ''}`}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.name ? 'border-red-400' : 'border-[#E9DDF7]'} focus:border-[#6D28D9] focus:ring-2 focus:ring-[#6D28D9]/20 bg-[#FAF9FF] outline-none transition-all duration-300`}
                       placeholder="John Doe"
                     />
                     {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -219,7 +288,7 @@ const Contact = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`input-field border-[#E9DDF7] focus:border-[#6D28D9] bg-[#FAF9FF] ${errors.email ? 'border-red-400' : ''}`}
+                      className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-400' : 'border-[#E9DDF7]'} focus:border-[#6D28D9] focus:ring-2 focus:ring-[#6D28D9]/20 bg-[#FAF9FF] outline-none transition-all duration-300`}
                       placeholder="john@example.com"
                     />
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -233,7 +302,7 @@ const Contact = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className={`input-field border-[#E9DDF7] focus:border-[#6D28D9] bg-[#FAF9FF] ${errors.phone ? 'border-red-400' : ''}`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.phone ? 'border-red-400' : 'border-[#E9DDF7]'} focus:border-[#6D28D9] focus:ring-2 focus:ring-[#6D28D9]/20 bg-[#FAF9FF] outline-none transition-all duration-300`}
                     placeholder="+2341234567890"
                   />
                   {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
@@ -246,7 +315,7 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`input-field border-[#E9DDF7] focus:border-[#6D28D9] bg-[#FAF9FF] ${errors.subject ? 'border-red-400' : ''}`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.subject ? 'border-red-400' : 'border-[#E9DDF7]'} focus:border-[#6D28D9] focus:ring-2 focus:ring-[#6D28D9]/20 bg-[#FAF9FF] outline-none transition-all duration-300`}
                     placeholder="What is this about?"
                   />
                   {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
@@ -259,7 +328,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows="5"
-                    className={`input-field border-[#E9DDF7] focus:border-[#6D28D9] bg-[#FAF9FF] ${errors.message ? 'border-red-400' : ''}`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.message ? 'border-red-400' : 'border-[#E9DDF7]'} focus:border-[#6D28D9] focus:ring-2 focus:ring-[#6D28D9]/20 bg-[#FAF9FF] outline-none transition-all duration-300 resize-none`}
                     placeholder="Tell us how we can help you..."
                   />
                   {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
