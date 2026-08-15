@@ -14,8 +14,9 @@ import {
 } from 'react-icons/fi';
 import { IoSparkles } from 'react-icons/io5';
 
-// Import hero banner image
+// Import hero banner images
 import heroAboutUs from '../assets/images/hero_aboutus.jpg';
+import heroAboutUsSider from '../assets/images/hero_aboutus_sider.jpg';
 
 const About = () => {
   const stats = [
@@ -119,11 +120,11 @@ const About = () => {
               </Link>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-[#6D28D9]/10 to-[#2563EB]/10 rounded-2xl overflow-hidden border border-[#E9DDF7]">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-[#E9DDF7] flex items-center justify-center bg-transparent">
                 <img
-                  src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600"
+                  src={heroAboutUsSider}
                   alt="Beauty Products"
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-4 border border-[#E9DDF7]">
@@ -214,7 +215,7 @@ const About = () => {
 
       {/* Our Values */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center justify-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-[#6D28D9] bg-[#F7F3FF] px-3 py-1 rounded-full border border-[#E9DDF7]">
               Our Values
@@ -229,8 +230,8 @@ const About = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, index) => (
-              <div key={index} className="bg-[#FAF9FF] rounded-2xl p-6 border border-[#E9DDF7] hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 bg-[#F7F3FF] rounded-xl flex items-center justify-center mb-4">
+              <div key={index} className="bg-[#FAF9FF] rounded-2xl p-6 border border-[#E9DDF7] hover:shadow-lg transition-all duration-300 text-center">
+                <div className="w-12 h-12 bg-[#F7F3FF] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <value.icon className="w-6 h-6 text-[#6D28D9]" aria-hidden="true" />
                 </div>
                 <h3 className="text-lg font-bold text-[#241238] mb-2">{value.title}</h3>
